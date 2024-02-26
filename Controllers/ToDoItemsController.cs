@@ -113,7 +113,23 @@ namespace ToDoList.Controllers
             {
                 return NotFound();
             }
+            toDoItem.UserID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (toDoItem.UserID != null)
+            {
+                ModelState["UserID"].ValidationState = ModelValidationState.Valid;
+            }
+            if (toDoItem.Date < DateTime.Today)
+            {
+                ModelState.AddModelError("Date", "Data musi być dzisiaj lub później.");
+            }
 
+            if (toDoItem.StartDate != null && toDoItem.EndDate != null)
+            {
+                if (toDoItem.StartDate > toDoItem.EndDate)
+                {
+                    ModelState.AddModelError("StartDate", "Czas rozpoczęcia nie może być późniejszy niż czas zakończenia.");
+                }
+            }
             if (ModelState.IsValid)
             {
                 try
