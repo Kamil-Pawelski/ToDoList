@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Edit";
+    string? startDate = Model.StartDate != null ? Model.StartDate.Value.ToShortTimeString() : null;
+    string? endDate = Model.EndDate != null ? Model.EndDate.Value.ToShortTimeString() : null;
 }
 
 <h1>Edycja</h1>
@@ -24,12 +26,12 @@
             </div>
             <div class="form-group">
                 <label asp-for="StartDate" class="control-label">Czas rozpoczęcia zadania</label>
-                <input asp-for="StartDate" type="time" value="@Model.StartDate.Value.ToShortTimeString()" class="form-control" />
+                <input asp-for="StartDate" type="time" value="@startDate" class="form-control" />
                 <span asp-validation-for="StartDate"  class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="EndDate" class="control-label">Czas zakończenia zadania</label>
-                <input asp-for="EndDate" type="time" value="@Model.EndDate.Value.ToShortTimeString()" class="form-control">
+                <input asp-for="EndDate" type="time" value="@endDate" class="form-control">
                 <span asp-validation-for="EndDate" class="text-danger"></span>
             </div>
             <div class="form-group">
