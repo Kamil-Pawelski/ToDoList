@@ -1,0 +1,53 @@
+﻿@using System.Security.Claims
+@model IEnumerable<ToDoList.Models.ToDoItemModel>
+
+@{
+    ViewData["Title"] = "Strona główna";
+    var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+}
+
+<div class="text-center">
+    <h1 class="display-4">Twoja własna lista zadań</h1>
+    @if (User.Identity.IsAuthenticated)
+    {
+
+        var todayTasks = Model.Where(item => item.Date.Date == DateTime.Today && item.UserID == userId);
+
+        if (todayTasks.Any())
+        {
+            <h2>Dzisiejsze zadania:</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Zadanie</th>
+                        <th scope="col">Czas rozpoczęcia zadania</th>
+                        <th scope="col">Czas zakończenia zadania</th>
+                        <th scope="col">Opis</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in todayTasks)
+                    {
+                        <tr>
+                            <td>@item.Name</td>
+                            <td>@(item.StartDate != null ? item.StartDate.Value.ToString("HH:mm") : "-")</td>
+                            <td>@(item.EndDate != null ? item.EndDate.Value.ToString("HH:mm"): "-")</td>
+                            <td>@(item.Description != null ? item.Description : "-")</td>
+                        </tr>
+
+                    }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Brak zadań na dziś.</p>
+        }
+    }
+    else
+    {
+        <p>Zaloguj się by skorzystać ze strony</p>
+        <a class="btn btn-primary btn-lg"  asp-area="Identity" asp-page="/Account/Login">Logowanie</a>
+    }
+</div>
